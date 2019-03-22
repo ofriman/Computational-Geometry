@@ -1,0 +1,328 @@
+\documentclass[a4paper, 8pt, oneside]{article}
+
+ \usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb, float,centernot}
+\usepackage[shortlabels]{enumitem}
+ \usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+\newtheorem{theorem}{Theorem}[section]
+  
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand\abs[1]{\left|#1\right|}
+\newenvironment{sol}
+    {\emph{Solution:}
+    }
+    {
+    \qed
+    }
+\begin{document}
+
+\title{Computational Geometry: Assignment 1}
+\author{Oren Friman 301677613}
+\maketitle
+
+\medskip
+
+\begin{enumerate}
+\item
+ Recall that for $p, q, r \in \R^2$ we defined $orient(p,q,r) = \text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+    p &q & r
+\end{bmatrix}$.
+
+Prove the following claims algebraically, without using any pictures:
+ \begin{enumerate}
+\item  $orient(p,q,r) = orient(q,r,p) = orient(r,p,q) = -orient(p,r,q) = -orient(q,p,r) = -orient(r,q,p)$
+
+\begin{sol}
+Recall that if $B$ is a matrix obtained from $A$ by interchanging two rows (columns), then $det B = - det A$
+\begin{align*}
+orient(p,q,r) &=  
+\text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+    p &q & r
+\end{bmatrix}\\&=
+- \text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   q &p & r
+\end{bmatrix} && C_1 \leftrightarrow C_2 \\&=
+\text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   q &r & p
+\end{bmatrix} =  orient(q,r,p) && C_2 \leftrightarrow C_3 \\&=
+-\text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   r &q & p
+\end{bmatrix} && C_1 \leftrightarrow C_2 \\&=
+\text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   r &p & q
+\end{bmatrix} =  orient(r,p,q) && C_2 \leftrightarrow C_3 \\&=
+- \text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   p &r & q
+\end{bmatrix} =  - orient(p,r,q) && C_1 \leftrightarrow C_2 \\&=
+\text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   p &q & r
+\end{bmatrix} = && C_2 \leftrightarrow C_3 \\&=
+- \text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   q &p & r
+\end{bmatrix} =  - orient(q,p,r)  && C_1 \leftrightarrow C_2 \\&=
+\text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   q &r & p
+\end{bmatrix}  = && C_2 \leftrightarrow C_3 \\&=
+- \text{sign det}
+\begin{bmatrix}
+    1 &1 & 1 \\
+   r &q & p
+\end{bmatrix} =  - orient(r,q,p) && C_1 \leftrightarrow C_2
+\end{align*}
+\end{sol}
+
+\item \label{itm:interiority} if $orient(p,x,q) =orient(q,x,r) = orient(r,x,p)$, then:
+\begin{itemize}
+\item $orient(r,q,p)$ is also equal to them;
+\item $x$ is a convex combination of $p,q,r$.
+\end{itemize}
+\begin{sol}
+Notice that
+\begin{equation*} det
+\begin{bmatrix}
+    1 &1 & 1 & 1\\
+    1 &1 & 1 & 1\\
+    r &q & p & x
+\end{bmatrix} = 0
+\end{equation*}
+because If $A$ is a matrix with two identical rows (or columns), then $det A = 0$.
+Now lets expand the left hand side by the cofactors of its first row
+\begin{align*}
+det
+\begin{bmatrix}
+    1 &1 & 1 & 1\\
+    1 &1 & 1 & 1\\
+    r &q & p & x
+\end{bmatrix} &=
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    q& p & x
+\end{bmatrix} -
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & p& x
+\end{bmatrix} +
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & q & x
+\end{bmatrix} -
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & q & p
+\end{bmatrix} \\&=
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    p& x & q
+\end{bmatrix} +
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & x& p
+\end{bmatrix} +
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    q & x & r
+\end{bmatrix} -
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & q & p
+\end{bmatrix} &= 0
+\end{align*}
+So
+\begin{equation}\label{interiority}
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & q & p
+\end{bmatrix} =
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    p& x & q
+\end{bmatrix} +
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & x& p
+\end{bmatrix} +
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    q & x & r
+\end{bmatrix} 
+\end{equation}
+Now assume $orient(p,x,q) =orient(q,x,r) = orient(r,x,p)$ and lets calculate $orient(r,q,p)$
+\begin{align*}
+orient(r,q,p) &= \text{sign det}
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & q & p
+\end{bmatrix} \\&= \text{sign} \Bigg(
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    p& x & q
+\end{bmatrix} +
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & x& p
+\end{bmatrix} +
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    q & x & r
+\end{bmatrix} 
+\Bigg) && (\ref{interiority}) \\&=
+ \text{sign det}
+\begin{bmatrix}
+    1 & 1 & 1\\
+    p & x & q
+\end{bmatrix} && \text{by assumption}  \\&= orient(p,x,q).
+\end{align*}
+Now we can use Cramer's rule to calculate $x$ from combination of $p, q, r$
+\begin{equation*}
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix} t = \begin{bmatrix}
+    1 \\ x
+\end{bmatrix}
+\end{equation*}
+\begin{equation*}
+\frac{det \begin{bmatrix}
+    1 & 1 & 1\\
+    x &q & p
+\end{bmatrix}}{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix}} r +
+\frac{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &x & p
+\end{bmatrix}}{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix}} q +
+\frac{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & x
+\end{bmatrix}}{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix}} p = \begin{bmatrix}
+    1 \\ x
+\end{bmatrix}
+\end{equation*}
+Now let's calculate the sum of coefficients
+\begin{align*}
+\frac{det \begin{bmatrix}
+    1 & 1 & 1\\
+    x &q & p
+\end{bmatrix}}{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix}} +
+\frac{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &x & p
+\end{bmatrix}}{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix}} +
+\frac{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & x
+\end{bmatrix}}{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix}} &=
+\frac{det \begin{bmatrix}
+    1 & 1 & 1\\
+    x &q & p
+\end{bmatrix} + det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &x & p
+\end{bmatrix} + det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & x
+\end{bmatrix}}{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix}} \\&= 
+\frac{det \begin{bmatrix}
+    1 & 1 & 1\\
+    p &x & q
+\end{bmatrix} + det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &x & p
+\end{bmatrix} + det \begin{bmatrix}
+    1 & 1 & 1\\
+    q &x & r
+\end{bmatrix}}{det \begin{bmatrix}
+    1 & 1 & 1\\
+    r &q & p
+\end{bmatrix}}
+\\&= 1 && (\ref{interiority})
+\end{align*}
+Moreover recall that all coefficients have the same sign in the numerator and in the denominator so all of them most be positive, therefore this is convex combination.
+\end{sol}
+\item if $orient(p,x,q) = orient(p,x,r) = orient(p,x,s) = orient(q,x,r) = orient(r,x,s)$ then $orient(q,x,s)$ is also equal to them.
+
+\begin{sol}
+By contradiction assume that $orient(q,x,s)$ is not equal to them, then by flipping columns
+\begin{equation*}
+orient(q,x,s) = -orient(q,s,x) = orient(s,q,x) = -orient(s,x,q).
+\end{equation*}
+Notice that
+\begin{equation*}
+ orient(q,x,r) = orient(r,x,s) = orient(s,x,q)
+\end{equation*}
+So by (\ref{itm:interiority}) $x$ is a convex combination of $q,r,s$.
+Now recall from assumption that
+\begin{equation*}
+orient(p,x,q) = orient(p,x,r) = orient(p,x,s)
+\end{equation*}
+But this is impossible because $x$ is a convex combination of $q,r,s$.
+\end{sol}
+\end{enumerate}
+
+\end{enumerate}
+\end{document}
