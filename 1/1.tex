@@ -42,7 +42,7 @@
 
 Prove the following claims algebraically, without using any pictures:
  \begin{enumerate}
-\item  $orient(p,q,r) = orient(q,r,p) = orient(r,p,q) = -orient(p,r,q) = -orient(q,p,r) = -orient(r,q,p)$
+\item  \label{item:orient} $orient(p,q,r) = orient(q,r,p) = orient(r,p,q) = -orient(p,r,q) = -orient(q,p,r) = -orient(r,q,p)$
 
 \begin{sol}
 Recall that if $B$ is a matrix obtained from $A$ by interchanging two rows (columns), then $det B = - det A$
@@ -144,28 +144,50 @@ det
     1 & 1 & 1\\
     r & q & p
 \end{bmatrix} \\&=
-det
-\begin{bmatrix}
+- \underbrace{det\begin{bmatrix}
     1 & 1 & 1\\
-    p& x & q
-\end{bmatrix} +
-det
+    p& q & x
+\end{bmatrix}}_{C_1 \leftrightarrow C_2}
++ \underbrace{det
 \begin{bmatrix}
     1 & 1 & 1\\
     r & x& p
-\end{bmatrix} +
-det
+\end{bmatrix}}_{C_2 \leftrightarrow C_3}
+-\underbrace{det
 \begin{bmatrix}
     1 & 1 & 1\\
-    q & x & r
-\end{bmatrix} -
+    q & r & x
+\end{bmatrix}}_{C_1 \leftrightarrow C_2} -
 det
 \begin{bmatrix}
     1 & 1 & 1\\
     r & q & p
-\end{bmatrix} &= 0
+\end{bmatrix}  \\&=
+\underbrace{det\begin{bmatrix}
+    1 & 1 & 1\\
+    p& x & q
+\end{bmatrix}}_{C_2 \leftrightarrow C_3}
++
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & x& p
+\end{bmatrix}
++ \underbrace{det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    q & x & r
+\end{bmatrix}}_{C_2 \leftrightarrow C_3} -
+det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & q & p
+\end{bmatrix} = 0
 \end{align*}
-So
+Adding $\small det
+\begin{bmatrix}
+    1 & 1 & 1\\
+    r & q & p
+\end{bmatrix}$ to  both side
 \begin{equation}\label{interiority}
 det
 \begin{bmatrix}
@@ -215,7 +237,7 @@ det
 \begin{bmatrix}
     1 & 1 & 1\\
     p & x & q
-\end{bmatrix} && \text{by assumption}  \\&= orient(p,x,q).
+\end{bmatrix} && \text{\small by assumption all signs are equal.}  \\&= orient(p,x,q).
 \end{align*}
 Now we can use Cramer's rule to calculate $x$ from combination of $p, q, r$
 \begin{equation*}
@@ -307,16 +329,16 @@ Moreover recall that all coefficients have the same sign in the numerator and in
 \item if $orient(p,x,q) = orient(p,x,r) = orient(p,x,s) = orient(q,x,r) = orient(r,x,s)$ then $orient(q,x,s)$ is also equal to them.
 
 \begin{sol}
-By contradiction assume that $orient(q,x,s)$ is not equal to them, then by flipping columns
-\begin{equation*}
+By contradiction assume that $orient(q,x,s)$ is not equal to them, by (\ref{item:orient}) we know that
+\begin{equation}\label{item:orientchanges}
 orient(q,x,s) = -orient(q,s,x) = orient(s,q,x) = -orient(s,x,q).
-\end{equation*}
-Notice that
+\end{equation}
+From the assumtion and \ref{item:orientchanges} we get
 \begin{equation*}
  orient(q,x,r) = orient(r,x,s) = orient(s,x,q)
 \end{equation*}
 So by (\ref{itm:interiority}) $x$ is a convex combination of $q,r,s$.
-Now recall from assumption that
+Now recall from the assumption that
 \begin{equation*}
 orient(p,x,q) = orient(p,x,r) = orient(p,x,s)
 \end{equation*}
