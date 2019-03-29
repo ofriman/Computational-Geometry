@@ -1,11 +1,9 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <title>Assignment 1</title>
 </head>
-
 <body>
   <div>
     <label style="cursor: pointer;" for="input-file">Specify a file:</label><br>
@@ -16,7 +14,28 @@
   <div id="draw-target"></div>
   <script type="text/javascript">
     const orient = (p, q, r) => (q[0] * r[1] - r[0] * q[1] - p[0] * r[1] + r[0] * p[1] + p[0] * q[1] - q[0] * p[1]) < 0 ? -1 : 1;
-    const rightTangent = (p, q) => p.find(pi => !p.some(pj => pj !== pi && orient(q, pi, pj) === -1));
+    const isRight = (p, q, r) => orient(p, q, r) === 1;
+    const rightTangent = (p, q) => {
+       let total = p.length
+       let start = 0;
+       let stop = p.length - 1;
+       const normalize = n => n >= 0 ? n % total : total + n;
+       while (start <= stop) {
+         const middle = Math.floor((start + stop - 1) / 2);
+         const mNext = isRight(q, p[normalize(middle)], p[normalize(middle + 1)]);
+         const mPrev = isRight(q, p[normalize(middle)], p[normalize(middle - 1)]);
+        if (mNext && mPrev){
+          return p[normalize(middle)];
+        } else if(mPrev){
+          start = middle + 1;
+        }else if (mNext){
+          stop = middle;
+        } else {
+          start = middle + 1;
+        }
+      };
+      throw "not found";
+    };
     const contentArea = document.getElementById('content-target');
     const resultArea = document.getElementById('result-target');
     const contentDraw = document.getElementById('draw-target');
@@ -54,7 +73,6 @@
             contentDraw.appendChild(canvas);
             ctx.translate(min, min);
             ctx.scale(1, -1);
-
             ctx.strokeStyle = 'blue';
             ctx.arc(q[0], q[1], 2, 0, 2 * Math.PI);
             ctx.fill();
@@ -65,11 +83,11 @@
             ctx.lineTo(p[0][0], p[0][1]);
             ctx.stroke();
             ctx.beginPath();
+            const rt = rightTangent(p, q);
             ctx.strokeStyle = 'red';
             ctx.moveTo(q[0], q[1]);
-            const rt = rightTangent(p, q);
-            resultArea.value = `output:\ntrivial: (${rt[0]},${rt[1]}) is the "right tangent" of P through q`;
             ctx.lineTo(rt[0], rt[1]);
+            resultArea.value = `output:\n(${rt[0]},${rt[1]}) is the "right tangent" of P through q`;
             ctx.stroke();
           })
           .catch(error => {
@@ -79,5 +97,4 @@
     });
   </script>
 </body>
-
 </html>
