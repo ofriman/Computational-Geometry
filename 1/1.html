@@ -19,13 +19,19 @@
        let total = p.length
        let start = 0;
        let stop = p.length - 1;
+       let log = "";
+       let i = 0;
        const normalize = n => n >= 0 ? n % total : total + n;
        while (start <= stop) {
+         i += 1;
          const middle = Math.floor((start + stop - 1) / 2);
          const mNext = isRight(q, p[normalize(middle)], p[normalize(middle + 1)]);
          const mPrev = isRight(q, p[normalize(middle)], p[normalize(middle - 1)]);
+         log += `step ${i}: start = ${start}, middle = ${middle}, stop = ${stop}\n`;
         if (mNext && mPrev){
-          return p[normalize(middle)];
+          const found = p[normalize(middle)];
+          log += `(${found[0]},${found[1]}) is the "right tangent" of P through q`;
+          return {found, log};
         } else if(mPrev){
           start = middle + 1;
         }else if (mNext){
@@ -34,7 +40,8 @@
           start = middle + 1;
         }
       };
-      throw "not found";
+      log += "not found";
+      return {log}
     };
     const contentArea = document.getElementById('content-target');
     const resultArea = document.getElementById('result-target');
@@ -84,10 +91,12 @@
             ctx.stroke();
             ctx.beginPath();
             const rt = rightTangent(p, q);
-            ctx.strokeStyle = 'red';
-            ctx.moveTo(q[0], q[1]);
-            ctx.lineTo(rt[0], rt[1]);
-            resultArea.value = `output:\n(${rt[0]},${rt[1]}) is the "right tangent" of P through q`;
+            if (rt.found) {
+              ctx.strokeStyle = 'red';
+              ctx.moveTo(q[0], q[1]);
+              ctx.lineTo(rt.found[0], rt.found[1]);
+            }
+            resultArea.value = rt.log;
             ctx.stroke();
           })
           .catch(error => {
