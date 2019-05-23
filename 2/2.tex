@@ -89,20 +89,20 @@ Describe in detail an efficient algorithm that, given a polygon $\mathcal{P}$ wi
 \begin{sol}
 Given a polygon $\mathcal{P}$ with $n$ vertices $\{v_1, \ldots, v_n \}$ clockwise - \\
 
- \begin{itemize}
-   \item Let $v_l$ and $v_r$ be the  vertices with the min and max  x-coordinate value  respectively(exhaustive search).
+ \begin{enumerate}
+   \item  \label{itm:setp1}  Let $v_l$ and $v_r$ be the  vertices with the min and max  x-coordinate value  respectively(exhaustive search).
     \begin{figure}[h!]
 \includegraphics[scale=0.4]{chanis}
 \centering
 \end{figure} \\
-\item  return true if all  x-coordinate values in  $v_l, v_{l+1\%n}, v_{l+2\%n}, \ldots, v_r$ and $v_l, v_{l-1\%n}, v_{l-2\%n}, \ldots, v_r$ are not decreasing.\\
+\item \label{itm:setp2} return true if all  x-coordinate values in  $v_l, v_{l+1\%n}, v_{l+2\%n}, \ldots, v_r$ and $v_l, v_{l-1\%n}, v_{l-2\%n}, \ldots, v_r$ are not decreasing.\\
 This way we avoid bad cases -
     \begin{figure}[h!]
 \includegraphics[scale=0.4]{ver}
 \centering
 \end{figure} \\
-\end{itemize}
-
+\end{enumerate}
+Notice that we iterate over all vertices in \ref{itm:setp1} $\mathcal{O}(n)$ and iterate over the sequences in \ref{itm:setp2} $\mathcal{O}(n)$  so we get that the time complexty is $\mathcal{O}(n)$.
 \end{sol}
 
 \end{enumerate}
