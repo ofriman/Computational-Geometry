@@ -1,0 +1,91 @@
+\documentclass[a4paper, 8pt, oneside]{article}
+
+ \usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb, float,centernot}
+\usepackage[shortlabels]{enumitem}
+ \usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\newcommand{\arcangle}{\mathord{\mathpalette\doarcangle\relax}}
+\newcommand{\doarcangle}[2]{%
+  \hbox{%
+    \sbox0{$#1B$}%
+    \sbox2{$#1<$}%
+    \raisebox{\dimexpr\dp2+(\ht0-\ht2)/2}{%
+      $#1<\mspace{-9mu}\mathrel{)}\mspace{2mu}$%
+    }%
+  }%
+}
+
+\newtheorem{theorem}{Theorem}[section]
+  
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand\abs[1]{\left|#1\right|}
+\newenvironment{sol}
+    {\emph{Solution:}
+    }
+    {
+    \qed
+    }
+    
+
+
+\begin{document}
+
+\title{Computational Geometry: Assignment 2}
+\author{Oren Friman 301677613}
+\maketitle
+
+\medskip
+
+\begin{enumerate}
+\item \label{item:q1} Describe in detail an algorithm that solves in  $\mathcal{O}(n\log{}n)$ time the following problem: \\
+Input:
+ \begin{itemize}
+  \item A collection on $n$ disjoint segments in the plane $s_1, \ldots, s_n$ each one given by its two endpoints.
+  \item A point $p$ in the plane, not lying on any segment.
+\end{itemize}
+Output: The set $\{ i \mid s_i \text{ is visible from } p\}$ \\
+A segment $s_i$ is visible from $p$ if there exists a point $q \in s_i$ such that the segment $pq$ does not intersect  any other segment $s_j$. In the following example, the segments visible from $p$ are colored blue and the other ones are colored red:
+\begin{figure}[h]
+\includegraphics[scale=0.5]{example1}
+\centering
+\end{figure} \\
+You can assume general position for simplicity. \\
+\textbf{Hint:} Use a radial sweep centered at $p$. \\ \\
+\begin{sol}
+
+The plane sweep algorithm  presented in the class and in the book \cite[Chapter 2]{computationalbook} used a horizontal line to sweep downwards over the plane. For this problem it will be more convenient to sweep the plane with a rotating line (radial sweep centered at $p$).
+
+We start by describing the data structures the algorithm uses - (similar to the plane sweep algorithm)
+ \begin{itemize}
+   \item Event queue $\mathcal{Q}$, balanced binary search tree, 
+   the queue will allow to get the next event ordered by $\prec$ and remove it from the queue also insert new events (intersection points).
+   Define an order $\prec$ on the events points - if $e_1$ and $e_2$ are two event points and $\ell$ is the sweep line then we have $e_1 \prec e_2$ if and only if $\arcangle (e_1 p) \ell > \arcangle (e_2 p) \ell$ holds or $\arcangle (e_1 p) \ell = \arcangle (e_2 p) \ell$ and distance$(e_1, p)$ $<$ distance$(e_2, p)$ holds.
+  \item Status structure $\mathcal{T}$, balanced binary search tree, ordered sequence of segments intersecting the sweep line, it will get updated each step.
+\end{itemize}
+Next the algorithm will sweep radially clockwise direction from the start of some line (Ordered by $\prec$) and will follow same steps as the plane sweep algorithm (intersection points will be added to the queue) but additionally we will track the closest segment from the status structure each step and output all of those segments in the end.
+\\ \\
+Notice that we are using same algorithm with same number of events so the time complexty will be similar $\mathcal{O}(n\log{}n)$.
+\end{sol}
+
+\end{enumerate}
+
+
+\medskip
+ 
+\begin{thebibliography}{9}
+\bibitem{computationalbook} 
+Mark de Berg, Otfried Cheong, Marc van Kreveld, Mark Overmars.
+\textit{Computational Geometry: Algorithms and Applications 3rd Edition}, 2008.
+\end{thebibliography}
+
+\end{document}
