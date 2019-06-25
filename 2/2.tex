@@ -90,8 +90,9 @@ We start by describing the data structures the algorithm uses -
 
 \textbf{Algorithm} HANDLEEVENTPOINT$(p, q$)\\
 \begin{enumerate}
-\item if $q$ is left point in the segment insert the segment to $\mathcal{T}$ else delete $q$ segment from $\mathcal{T}$.
+\item if $q$ is right point in the segment delete $q$ segment from $\mathcal{T}$.
 \item the closet segment $s_i$ in $\mathcal{T}$ to $p$ is visible.
+\item if $q$ is left point in the segment insert the segment to $\mathcal{T}$
 \end{enumerate}
 Time complexity analysis - \\
 Constructing the event queue is $\mathcal{O}(n\log{}n)$ \\
