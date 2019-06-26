@@ -15,7 +15,6 @@ def orientation_sort(points, p):
 
 
 def merge_sort(points, comp, p):
-    """lexicographic point sort."""
     if len(points) < 2:
         return points
     mid = len(points) // 2
@@ -23,7 +22,6 @@ def merge_sort(points, comp, p):
 
 
 def merge(left, right, comp, p):
-    """ Combines two sorted lists into one."""
     combined = []
     left_index = right_index = 0
     left_len = len(left)
@@ -40,8 +38,6 @@ def merge(left, right, comp, p):
 
 
 def orientation(p, q, r):
-    """ orientation
-    """
     orient = (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
     if orient > 0:
         return 1
@@ -52,8 +48,6 @@ def orientation(p, q, r):
 
 
 def take_smallest(points):
-    """
-    """
     rest = []
     p = points[0]
     for q in points[1:]:
@@ -79,3 +73,10 @@ def connect_points(points, close=True):
     for i in range(len(points) - (0 if close else 1)):
         edges.append([points[i], points[(i + 1) % len(points)]])
     return edges
+
+
+def get_tuples(txt, dimension=2, delimiter=' '):
+    str_split = txt.rstrip().split(delimiter)
+    return list(map(lambda a: tuple(map(int, a)),
+                    [str_split[i:i + dimension] for i in range(0, len(str_split), dimension)]))
+
