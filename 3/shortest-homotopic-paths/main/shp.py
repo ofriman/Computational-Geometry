@@ -1,6 +1,4 @@
 from main.utils import *
-import matplotlib.pyplot as plt
-import sys
 
 
 def main():
@@ -69,36 +67,6 @@ def reduce(edges):
             s[t] = edges[i]
 
     return s[1:t]
-
-
-def get_input():
-    file = open(sys.argv[1], 'r')
-    obstacle_len = int(file.readline())
-    obstacle = get_tuples(file.readline())
-    path_len = int(file.readline())
-    path = get_tuples(file.readline())
-
-    assert len(obstacle) == obstacle_len
-    assert len(path) == path_len
-
-    return obstacle, path
-
-
-def show_lines(edges, color):
-    for e in edges:
-        plt.plot([p[0] for p in e], [p[1] for p in e], c=color)
-
-
-def show_points(vertices, color):
-    plt.scatter([p[0] for p in vertices], [p[1] for p in vertices], c=color)
-
-
-def show_out(obstacle, path, triangulation, reduce_cross_seq):
-    show_points(obstacle, 'red')
-    show_lines(path, 'green')
-    show_lines(triangulation, 'black')
-    show_lines(reduce_cross_seq, 'blue')
-    plt.show()
 
 
 if __name__ == "__main__":
